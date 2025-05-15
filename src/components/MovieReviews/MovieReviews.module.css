@@ -1,0 +1,32 @@
+.list {
+  padding: 0;
+  list-style: none;
+  margin: 0;
+}
+
+.item {
+  background: #f6f8fb;
+  border-radius: 12px;
+  box-shadow: 0 1px 8px rgba(44, 90, 180, 0.07);
+  margin-bottom: 18px;
+  padding: 14px 20px;
+}
+
+.author {
+  font-weight: 700;
+  color: #295fa6;
+  margin-bottom: 7px;
+}
+
+.content {
+  color: #232c34;
+  font-size: 1.04rem;
+  margin: 0;
+}
+
+.empty {
+  color: #85858a;
+  font-size: 1.08rem;
+  margin: 20px 0 16px;
+  text-align: center;
+}

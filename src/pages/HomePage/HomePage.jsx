@@ -1,6 +1,7 @@
+import styles from "./HomePage.module.css";
 import { useEffect, useState } from "react";
-import MovieList from "../../components/MovieList/MovieList";
 import { getTrendingMovies } from "../../api/tmdb";
+import MovieList from "../../components/MovieList/MovieList";
 
 export default function HomePage() {
   const [movies, setMovies] = useState([]);
@@ -8,25 +9,23 @@ export default function HomePage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchMovies() {
       try {
         setLoading(true);
         const data = await getTrendingMovies();
         setMovies(data);
-      } catch (error) {
-        setError(
-          error instanceof Error ? error.message : "Failed to fetch movies"
-        );
+      } catch (e) {
+        setError("Failed to fetch trending movies");
       } finally {
         setLoading(false);
       }
     }
-    fetchData();
+    fetchMovies();
   }, []);
 
   return (
-    <div>
-      <h1>Trending Movies</h1>
+    <div className={styles.wrapper}>
+      <h1 className={styles.title}>Trending Movies</h1>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
       <MovieList movies={movies} />

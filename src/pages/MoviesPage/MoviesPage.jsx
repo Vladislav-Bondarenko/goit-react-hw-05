@@ -1,8 +1,9 @@
+import styles from "./MoviesPage.module.css";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { searchMovies } from "../../api/tmdb";
 import MovieList from "../../components/MovieList/MovieList";
 import MovieSearchForm from "../../components/MovieSearchForm/MovieSearchForm";
-import { searchMovies } from "../../api/tmdb";
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState([]);
@@ -13,30 +14,25 @@ export default function MoviesPage() {
 
   useEffect(() => {
     if (!query) return;
-    async function fetchMovies() {
+    async function fetchData() {
       try {
         setLoading(true);
-        setError("");
         const data = await searchMovies(query);
         setMovies(data);
-      } catch (error) {
-        setError(
-          error instanceof Error ? error.message : "Failed to fetch movies"
-        );
+      } catch (e) {
+        setError("Failed to search movies");
       } finally {
         setLoading(false);
       }
     }
-    fetchMovies();
+    fetchData();
   }, [query]);
 
-  const handleSearch = (value) => {
-    setSearchParams({ query: value });
-  };
+  const handleSearch = (value) => setSearchParams({ query: value });
 
   return (
-    <div>
-      <h1>Search Movies</h1>
+    <div className={styles.wrapper}>
+      <h1 className={styles.title}>Search Movies</h1>
       <MovieSearchForm onSubmit={handleSearch} />
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}

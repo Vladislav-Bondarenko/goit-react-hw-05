@@ -7,6 +7,7 @@ import {
   NavLink,
 } from "react-router-dom";
 import { getMovieDetails } from "../../api/tmdb";
+import styles from "./MovieDetailsPage.module.css";
 
 const defaultImg =
   "https://dl-media.viber.com/10/share/2/long/vibes/icon/image/0x0/95e0/5688fdffb84ff8bed4240bcf3ec5ac81ce591d9fa9558a3a968c630eaba195e0.jpg";
@@ -41,45 +42,75 @@ export default function MovieDetailsPage() {
   }, [movieId]);
 
   return (
-    <div>
-      <button type="button" onClick={() => navigate(backLink.current)}>
-        Go back
+    <div className={styles.wrapper}>
+      <button
+        className={styles.goback}
+        type="button"
+        onClick={() => navigate(backLink.current)}
+      >
+        ← Go back
       </button>
 
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      {movie && (
-        <div>
-          <img
-            src={
-              movie.poster_path
-                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                : defaultImg
-            }
-            alt={movie.title}
-            width={250}
-          />
-          <h2>{movie.title}</h2>
-          <p>User Score: {movie.vote_average}</p>
-          <h3>Overview</h3>
-          <p>{movie.overview}</p>
-          <h3>Genres</h3>
-          <ul>
-            {movie.genres?.map((g) => (
-              <li key={g.id}>{g.name}</li>
-            ))}
-          </ul>
-        </div>
-      )}
 
-      <hr />
-      <nav>
-        <NavLink to="cast" style={{ marginRight: 20 }}>
-          Cast
-        </NavLink>
-        <NavLink to="reviews">Reviews</NavLink>
-      </nav>
-      <hr />
+      {movie && (
+        <>
+          <div className={styles.flex}>
+            <img
+              className={styles.poster}
+              src={
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                  : defaultImg
+              }
+              alt={movie.title}
+            />
+            <div className={styles.info}>
+              <h2 className={styles.title}>{movie.title}</h2>
+              <div className={styles.score}>
+                User Score: {movie.vote_average}
+              </div>
+              <div className={styles.section}>
+                <h3>Overview</h3>
+                <p>{movie.overview}</p>
+              </div>
+              <div>
+                <h3>Genres</h3>
+                <ul className={styles.genres}>
+                  {movie.genres?.map((g) => (
+                    <li className={styles.genre} key={g.id}>
+                      {g.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className={styles.tabs}>
+            <NavLink
+              to="cast"
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.tablink} ${styles.tablinkActive}`
+                  : styles.tablink
+              }
+            >
+              Cast
+            </NavLink>
+            <NavLink
+              to="reviews"
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.tablink} ${styles.tablinkActive}`
+                  : styles.tablink
+              }
+            >
+              Reviews
+            </NavLink>
+          </div>
+        </>
+      )}
       <Outlet />
     </div>
   );
